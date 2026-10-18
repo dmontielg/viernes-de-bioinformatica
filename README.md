@@ -1,4 +1,6 @@
-# R Shiny Development Environment Setup
+# Viernes de Bioinformatica - 13 de Noviembre 2026 
+
+## R Shiny Development Environment Setup
 
 This guide describes how to configure an R development environment using R, `rig`, `renv`, and VS Code.
 
@@ -13,12 +15,8 @@ curl -LsSf https://r-lib.github.io/rig/install.sh | sh
 Install R 4.6.1:
 
 ```bash
+rig available
 rig add 4.6.1
-```
-
-Check the installed R versions:
-
-```bash
 rig list
 ```
 
@@ -27,6 +25,10 @@ rig list
 ## 2. Install VS Code R Dependencies
 
 Start R and install the packages required for the VS Code R development environment:
+
+```bash
+code --install-extension REditorSupport.r --force
+```
 
 ```r
 install.packages(c(
@@ -96,7 +98,9 @@ sudo apt-get update
 
 sudo apt-get install -y \
   libtiff-dev \
-  libgit2-dev
+  libgit2-dev \
+  libuv1-dev \
+  pandoc
 ```
 
 Then install `shiny2docker` inside the project environment:
@@ -138,3 +142,8 @@ renv::restore()
 ```r
 renv::status()
 ```
+
+## Resources
+* https://mastering-shiny.org/basic-app.html
+* https://adv-r.hadley.nz/index.html
+* https://engineering-shiny.org/index.html

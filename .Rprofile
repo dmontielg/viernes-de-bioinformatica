@@ -5,4 +5,4 @@ if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
   }
 }
 
-#source("renv/activate.R")
+source("renv/activate.R")
