@@ -1,8 +1,19 @@
 # Viernes de Bioinformatica - 13 de Noviembre 2026 
 
-## R Shiny Development Environment Setup
+## R Shiny Development to Production
 
-This guide describes how to configure an R development environment using R, `rig`, `renv`, and VS Code.
+This repository is a hands-on introduction to the R Shiny development and deployment workflow.
+
+Starting from R environment setup, we will progressively cover:
+
+1. Installing and managing R versions with **rig**
+2. Creating reproducible project environments with **renv**
+3. Learning the fundamentals of **R Shiny**
+4. Building and running a Shiny application
+5. Containerizing the application with **Docker**
+6. Preparing the application for production deployment
+
+The repository is designed to provide a practical path from basic Shiny development to a reproducible, containerized application.
 
 ## 1. Install `rig`
 
