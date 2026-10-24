@@ -308,6 +308,6 @@ docker rmi curso-cowsay:1.0
 
 ## Recursos
 
-* https://mastering-shiny.org/basic-app.html
-* https://adv-r.hadley.nz/index.html
-* https://engineering-shiny.org/index.html
+* Advanced R https://adv-r.hadley.nz/index.html
+* Mastering Shiny https://mastering-shiny.org/basic-app.html
+* Engineering Production-Grade Shiny Apps https://engineering-shiny.org/index.html
