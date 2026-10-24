@@ -78,11 +78,10 @@ renv::init(bioconductor = "3.14")
 
 Instala un paquete usando renv
 
-
 ```r
-# Cran-packages
 renv::install("<package-name>")
 renv::install("jsonlite")
+
 renv::install(c(
   "languageserver",
   "httpgd",
@@ -90,6 +89,19 @@ renv::install(c(
   "jsonlite",
   "processx"
 ))
+
+renv::settings$ignored.packages(c(
+  "languageserver", 
+  "httpgd", 
+  "ps", 
+  "jsonlite", 
+  "processx"
+))
+# reset all
+renv::settings$ignored.packages(character())
+# list ignored packages
+renv::settings$ignored.packages()
+
 ```
 
 Guarda las versiones de los paquetes en `renv.lock`:
