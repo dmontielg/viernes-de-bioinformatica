@@ -39,6 +39,7 @@ Inicia R e instala los paquetes necesarios para el entorno de desarrollo de R en
 
 ```bash
 code --install-extension REditorSupport.r --force
+sudo apt-get install -y libtiff-dev
 ```
 
 ```r
@@ -77,9 +78,18 @@ renv::init(bioconductor = "3.14")
 
 Instala un paquete usando renv
 
+
 ```r
 # Cran-packages
 renv::install("<package-name>")
+renv::install("jsonlite")
+renv::install(c(
+  "languageserver",
+  "httpgd",
+  "ps",
+  "jsonlite",
+  "processx"
+))
 ```
 
 Guarda las versiones de los paquetes en `renv.lock`:
