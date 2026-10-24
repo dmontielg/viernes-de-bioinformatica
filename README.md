@@ -284,10 +284,14 @@ docker images
 
 `docker run` crea y ejecuta un contenedor a partir de una imagen. En el ejemplo anterior, `cowsay` termina inmediatamente después de mostrar el mensaje; por eso, no aparecerá en la lista de contenedores activos. Para ver los contenedores finalizados, usa `docker ps -a`.
 
-Para probar `docker ps` con un contenedor activo, ejecuta temporalmente `sleep` en la misma imagen:
-
 ```bash
-docker run -d --name cowsay-demo --entrypoint /bin/sh curso-cowsay:1.0 -c "echo 'Contenedor activo'; sleep 300"
+docker run -d --name cowsay-demo curso-cowsay:1.0
+
+# Desde Docker hub
+docker run rancher/cowsay:latest
+docker run rancher/cowsay:latest "hola docker"
+docker run rancher/cowsay:latest -l
+docker run rancher/cowsay:latest -f "dragon-and-cow" "hola mundo"
 docker ps
 ```
 
@@ -304,6 +308,13 @@ docker rm cowsay-demo
 
 ```bash
 docker rmi curso-cowsay:1.0
+```
+
+Ahora usemos una imagen de `Rstudio` sin instalarlo.
+
+```bash
+docker run --rm -p 8787:8787 -e PASSWORD=test rocker/rstudio:4
+docker run --rm -p 8787:8787 -e PASSWORD=test -v $PWD:/home/rstudio/ rocker/rstudio:4
 ```
 
 ## Recursos
