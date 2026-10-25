@@ -39,19 +39,11 @@ Inicia R e instala los paquetes necesarios para el entorno de desarrollo de R en
 
 ```bash
 code --install-extension REditorSupport.r --force
+```
+### Dependencia para lintr y autocompletado de sintaxis R
+```bash
 sudo apt-get install -y libtiff-dev
 ```
-
-```r
-install.packages(c(
-  "languageserver",
-  "httpgd",
-  "ps",
-  "jsonlite",
-  "processx"
-))
-```
-
 
 ---
 
@@ -81,7 +73,8 @@ Instala un paquete usando renv
 ```r
 renv::install("<package-name>")
 renv::install("jsonlite")
-
+```
+```r
 renv::install(c(
   "languageserver",
   "httpgd",
@@ -89,7 +82,8 @@ renv::install(c(
   "jsonlite",
   "processx"
 ))
-
+```
+```r
 renv::settings$ignored.packages(c(
   "languageserver", 
   "httpgd", 
@@ -97,11 +91,12 @@ renv::settings$ignored.packages(c(
   "jsonlite", 
   "processx"
 ))
+```
+```r
 # reset all
 renv::settings$ignored.packages(character())
 # list ignored packages
 renv::settings$ignored.packages()
-
 ```
 
 Guarda las versiones de los paquetes en `renv.lock`:
@@ -261,6 +256,8 @@ Instala Docker Desktop o Docker Engine siguiendo las instrucciones oficiales par
 
 ```bash
 docker --version
+```
+```bash
 docker run --rm hello-world
 ```
 
@@ -290,7 +287,7 @@ docker build -t curso-cowsay:1.0 .
 El punto final indica que Docker debe usar el directorio actual como contexto de construcción. Ejecuta la imagen; el texto opcional reemplaza el mensaje predeterminado:
 
 ```bash
-docker run --rm curso-cowsay:1.0 "¡Hola, curso de bioinformática!"
+docker run --rm curso-cowsay:1.0 "¡Hola, curso de viernes bioinformática!"
 ```
 
 ### Descargar y listar imágenes
@@ -299,6 +296,8 @@ docker run --rm curso-cowsay:1.0 "¡Hola, curso de bioinformática!"
 
 ```bash
 docker pull debian:bookworm-slim
+```
+```bash
 docker images
 ```
 
