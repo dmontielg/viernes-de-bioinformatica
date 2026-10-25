@@ -6,16 +6,16 @@ Este repositorio ofrece una introducción práctica al desarrollo y despliegue d
 
 A partir de la configuración del entorno de R, el curso cubrirá progresivamente:
 
-1. Instalar y administrar versiones de R con **rig**.
-2. Crear entornos reproducibles para proyectos con **renv**.
-3. Aprender los fundamentos de **box**.
-5. Introduccion a **Docker**.
+1. Instalar y administrar versiones de R con [**rig**](https://rig.r-lib.org/).
+2. Crear entornos reproducibles para proyectos con [**renv**](https://rstudio.github.io/renv/articles/renv.html).
+3. Aprender los fundamentos de [**box**](https://klmr.me/box/).
+5. Introduccion a [**Docker**](https://hub.docker.com/).
 4. Contenerizar la aplicación con **Docker**.
-6. Preparar la aplicación para su despliegue en Docker hub.
+6. Preparar la aplicación para su despliegue en [Docker Hub](https://hub.docker.com/).
 
 El objetivo es ofrecer una ruta práctica desde los conceptos básicos de hasta una aplicación reproducible y contenerizada usando R como lenguaje. También se presentan el uso de librerias como `renv` para entornos reproducibles, módulos con `box` y finalmente crear una imagen `docker` para su reproducibilidad.
 
-## 1. Instalar `rig`
+## 1. Instalar [`rig`](https://rig.r-lib.org/)
 
 Instala el administrador de instalaciones de R:
 
@@ -47,7 +47,7 @@ sudo apt-get install -y libtiff-dev
 
 ---
 
-## 3. Inicializar `renv`
+## 3. Inicializar [`renv`](https://rstudio.github.io/renv/articles/renv.html)
 
 Instala `renv`:
 
@@ -121,7 +121,7 @@ Registra las versiones instaladas para que otras personas puedan reproducir el e
 renv::snapshot()
 ```
 
-## 5. Organizar el código en módulos con `box`
+## 5. Organizar el código en módulos con [`box`](https://klmr.me/box/)
 
 `box` permite separar el código en archivos reutilizables llamados módulos. Cada módulo puede contener funciones relacionadas; después, otro archivo lo importa y utiliza sus funciones. Esta organización ayuda a mantener más legibles los proyectos del curso a medida que crecen.
 
@@ -246,7 +246,7 @@ ggplot(quality_summary, aes(x = sample, y = passing_fraction, fill = sample)) +
   theme_minimal()
 ```
 
-## 7. Introducción a Docker
+## 7. Introducción a [Docker](https://hub.docker.com/)
 
 Docker permite empaquetar una aplicación y sus dependencias en una **imagen**. Al ejecutar esa imagen se crea un **contenedor**. La imagen sirve como plantilla; el contenedor es una instancia en ejecución (o ya finalizada) de esa plantilla.
 
@@ -292,7 +292,7 @@ docker run --rm curso-cowsay:1.0 "¡Hola, curso de viernes bioinformática!"
 
 ### Descargar y listar imágenes
 
-`docker pull` descarga una imagen del registro de Docker Hub. `docker images` muestra las imágenes disponibles localmente:
+`docker pull` descarga una imagen del registro de [Docker Hub](https://hub.docker.com/). `docker images` muestra las imágenes disponibles localmente:
 
 ```bash
 docker pull debian:bookworm-slim
