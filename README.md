@@ -42,7 +42,7 @@ code --install-extension REditorSupport.r --force
 ```
 ### Dependencia para lintr y autocompletado de sintaxis R
 ```bash
-sudo apt-get install -y libtiff-dev
+sudo apt-get install -y libtiff-dev libuv1-dev
 ```
 
 ---
