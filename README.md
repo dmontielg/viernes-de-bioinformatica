@@ -40,9 +40,9 @@ Inicia R e instala los paquetes necesarios para el entorno de desarrollo de R en
 ```bash
 code --install-extension REditorSupport.r --force
 ```
-### Dependencia para lintr y autocompletado de sintaxis R
+### Dependencia para R development R
 ```bash
-sudo apt-get install -y libtiff-dev libuv1-dev
+sudo apt-get install -y libtiff-dev libuv1-dev libgit2-dev
 ```
 
 ---
@@ -336,6 +336,20 @@ Ahora usemos una imagen de `Rstudio` sin instalarlo.
 ```bash
 docker run --rm -p 8787:8787 -e PASSWORD=test rocker/rstudio:4
 docker run --rm -p 8787:8787 -e PASSWORD=test -v $PWD:/home/rstudio/ rocker/rstudio:4
+```
+
+### Crear un Dockerfile con `dockerfiler`
+
+El paquete de R `dockerfiler` permite generar de forma sencilla un `Dockerfile` para un proyecto. Si el proyecto usa `renv`, puedes crear el archivo a partir de su lockfile:
+
+```r
+renv::install("ThinkR-open/dockerfiler")
+
+library(dockerfiler)
+
+my_dock <- dock_from_renv(lockfile = "renv.lock", user = NULL)
+my_dock
+my_dock$write("Dockerfile")
 ```
 
 ## Recursos
