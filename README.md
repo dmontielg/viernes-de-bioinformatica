@@ -42,7 +42,7 @@ code --install-extension REditorSupport.r --force
 ```
 ### Dependencia para R development R
 ```bash
-sudo apt-get install -y libtiff-dev libuv1-dev libgit2-dev
+sudo apt-get install -y libtiff-dev libuv1-dev libgit2-dev build-essential zlib1g-dev libbz2-dev liblzma-dev libdeflate-dev libcurl4-openssl-dev
 ```
 
 ---
@@ -340,7 +340,7 @@ docker run --rm -p 8787:8787 -e PASSWORD=test -v $PWD:/home/rstudio/ rocker/rstu
 
 ### Crear un Dockerfile con `dockerfiler`
 
-El paquete de R `dockerfiler` permite generar de forma sencilla un `Dockerfile` para un proyecto. Si el proyecto usa `renv`, puedes crear el archivo a partir de su lockfile:
+El paquete de R [`dockerfiler`](https://github.com/ThinkR-open/dockerfiler) permite generar de forma sencilla un `Dockerfile` para un proyecto. Si el proyecto usa `renv`, puedes crear el archivo a partir de su lockfile:
 
 ```r
 renv::install("ThinkR-open/dockerfiler")
@@ -352,8 +352,31 @@ my_dock
 my_dock$write("Dockerfile")
 ```
 
+### Construir y publicar la imagen en Docker Hub
+
+Antes de continuar, asegúrate de tener a mano tu usuario de Docker Hub y tu PAT. Inicia sesión con tu usuario; cuando Docker solicite la contraseña, introduce el PAT:
+
+```bash
+docker login --username tu_usuario
+```
+
+Desde el directorio que contiene el `Dockerfile`, construye la imagen con el nombre de tu cuenta y una etiqueta:
+
+```bash
+docker build -t tu_usuario/mi-imagen:1.0 .
+```
+
+Publica la imagen en Docker Hub:
+
+```bash
+docker push tu_usuario/mi-imagen:1.0
+```
+
+Reemplaza `tu_usuario` por tu nombre de usuario de Docker Hub. No escribas el PAT en el comando, en el `Dockerfile` ni en el repositorio.
+
 ## Recursos
 
 * Advanced R https://adv-r.hadley.nz/index.html
 * Mastering Shiny https://mastering-shiny.org/basic-app.html
 * Engineering Production-Grade Shiny Apps https://engineering-shiny.org/index.html
+* Instalacion facil de Docker (Para Linux/WSL2) https://github.com/docker/docker-install

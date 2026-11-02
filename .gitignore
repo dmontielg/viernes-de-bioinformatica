@@ -1,0 +1,10 @@
+settings.json
+renv/
+.Rprofile
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user
+.local
+.cache
+.config

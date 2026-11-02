@@ -1,12 +1,8 @@
 # Requisitos
 
-Antes de comenzar, asegúrate de tener disponibles las siguientes cuentas.
+## Requisito obligatorio antes del curso
 
-## Cuenta de GitHub
-
-Para el curso necesitas una **cuenta de GitHub**.
-
-Usarás GitHub para:
+Es obligatorio tener una **cuenta de GitHub** antes de comenzar el curso. La usaremos para:
 
 - Acceder al repositorio del curso.
 - Trabajar con Git y GitHub.
@@ -15,11 +11,15 @@ Usarás GitHub para:
 
 Crea una cuenta en: https://github.com/
 
+## Preparativos que puedes hacer antes o durante el curso
+
+No es necesario tener listos los siguientes servicios y accesos antes de comenzar; podrás configurarlos durante el curso, cuando los necesitemos.
+
 ## GitHub Codespaces
 
 En el curso usaremos **GitHub Codespaces** para proporcionar un entorno de desarrollo listo para usar directamente desde tu repositorio de GitHub.
 
-Comprueba que puedes:
+Durante el curso comprobaremos cómo:
 
 - Iniciar sesión en GitHub.
 - Acceder a GitHub Codespaces.
@@ -55,9 +55,9 @@ Ten a mano la siguiente información:
 
 > **Importante:** Trata tu PAT como una contraseña. No lo incluyas directamente en scripts, archivos Dockerfile ni repositorios de Git, y nunca lo subas a GitHub.
 
-## Lista de verificación previa al curso
+## Lista de verificación
 
-Antes de que comience el curso, comprueba que tienes:
+Antes de comenzar, solo necesitas tener una cuenta de GitHub. Los demás elementos puedes prepararlos antes o durante el curso:
 
 - [ ] Una cuenta de GitHub.
 - [ ] Acceso a GitHub Codespaces.
