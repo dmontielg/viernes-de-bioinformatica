@@ -4,7 +4,7 @@
 
 Antes de comenzar, asegurate de contar con:
 
-- Una **cuenta de GitHub**.
+- Una **cuenta de GitHub**, que usarás para GitHub y que también puedes usar para registrarte o iniciar sesión en Docker Hub.
 - **GitHub CLI (`gh`)** instalado y con la sesión iniciada.
 - **Docker** instalado y con la sesión iniciada en Docker Hub.
 
@@ -65,9 +65,9 @@ Si usas Codespaces, no necesitas instalar R ni VS Code en tu computadora.
 
 ## Cuenta de Docker Hub
 
-Para iniciar sesión en Docker y realizar los ejercicios de contenerización necesitas una **cuenta de Docker Hub**. Esta cuenta es obligatoria antes de comenzar.
+Para iniciar sesión en Docker y realizar los ejercicios de contenerización necesitas una **cuenta de Docker Hub**. Esta cuenta es obligatoria antes de comenzar. Puedes usar tu cuenta de GitHub para crearla o iniciar sesión: así usarás tu cuenta de GitHub tanto para las actividades de GitHub como para acceder a Docker Hub.
 
-Puedes usar tu **cuenta de GitHub para registrarte o iniciar sesión en Docker Hub**.
+Docker Hub es un servicio aparte, por lo que debes completar el registro o vincular tu cuenta de GitHub en Docker Hub:
 
 Crea una cuenta o accede a la tuya en: https://hub.docker.com/
 
@@ -95,7 +95,7 @@ Ten a mano la siguiente información:
 
 Antes de comenzar, asegúrate de cumplir todos estos requisitos:
 
-- [ ] Una cuenta de GitHub.
+- [ ] Una cuenta de GitHub para GitHub y para registrarte o iniciar sesión en Docker Hub.
 - [ ] GitHub CLI (`gh`) instalado y con la sesión iniciada; `gh auth status` confirma que está autenticado.
 - [ ] Docker instalado y con la sesión iniciada en Docker Hub mediante `docker login`.
 - [ ] Una cuenta de Docker Hub.
