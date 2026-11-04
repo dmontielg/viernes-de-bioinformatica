@@ -15,6 +15,73 @@ A partir de la configuración del entorno de R, el curso cubrirá progresivament
 
 El objetivo es ofrecer una ruta práctica desde los conceptos básicos de hasta una aplicación reproducible y contenerizada usando R como lenguaje. También se presentan el uso de librerias como `renv` para entornos reproducibles, módulos con `box` y finalmente crear una imagen `docker` para su reproducibilidad.
 
+## Antes de empezar: GitHub y tu primer commit
+
+Antes de comenzar los ejercicios, configuraremos GitHub CLI (`gh`) y crearás un repositorio propio en GitHub. Usaremos este `README.md` como contenido inicial para hacer tu primer commit.
+
+Inicia sesión con tu cuenta de GitHub y comprueba la autenticación:
+
+```bash
+gh auth login
+gh auth status
+```
+
+Crea un repositorio público y clónalo en tu computadora. Puedes llamarlo `viernes` o el nombre que quieras usar:
+
+```bash
+gh repo create viernes --public --clone
+cd viernes
+```
+
+Copia el archivo `README.md` de este repositorio del curso a la carpeta `viernes`. Luego registra el archivo, crea el commit inicial y súbelo a GitHub:
+
+```bash
+git add README.md
+git commit -m "Add initial README"
+git push -u origin HEAD
+```
+
+Así tendrás tu propio repositorio con este README como primer cambio registrado en Git.
+
+## Comandos útiles: `rig`, `renv` y Docker
+
+Estos son algunos comandos frecuentes durante el curso. Los comentarios indican para qué sirve cada uno.
+
+### Administrar versiones de R con `rig`
+
+```bash
+rig available       # Muestra las versiones de R que se pueden instalar.
+rig list            # Lista las versiones de R instaladas.
+rig add 4.6.1       # Instala R 4.6.1.
+rig default 4.6.1   # Selecciona R 4.6.1 como versión predeterminada.
+```
+
+### Administrar paquetes y reproducibilidad con `renv`
+
+Ejecuta estos comandos en la consola de R desde el proyecto:
+
+```r
+renv::status()                  # Comprueba si los paquetes instalados coinciden con renv.lock.
+renv::restore()                 # Instala las versiones de paquetes registradas en renv.lock.
+renv::install("ggplot2")        # Instala un paquete en el entorno del proyecto.
+renv::snapshot()                # Guarda en renv.lock las versiones actuales del proyecto.
+```
+
+### Trabajar con imágenes y contenedores Docker
+
+Ejecuta estos comandos en la terminal:
+
+```bash
+docker --version                       # Muestra la versión de Docker instalada.
+docker login                           # Inicia sesión en Docker Hub.
+docker images                          # Lista las imágenes disponibles localmente.
+docker ps -a                           # Lista los contenedores, incluidos los detenidos.
+docker run --rm hello-world            # Ejecuta una imagen de prueba y elimina el contenedor al terminar.
+docker build -t mi-imagen:1.0 .        # Construye una imagen desde el Dockerfile del directorio actual.
+docker push tu_usuario/mi-imagen:1.0   # Publica la imagen en Docker Hub.
+docker system prune -a                 # Borra todas las imagenes y cache del sistema
+```
+
 ## 1. Instalar [`rig`](https://rig.r-lib.org/)
 
 Instala el administrador de instalaciones de R:
@@ -63,9 +130,6 @@ renv::init()
 
 # Si quieres incluir packages en Bioconductor
 renv::init(bioconductor = TRUE)
-# Puedes tambien especificar que version usar
-renv::init(bioconductor = "3.14")
-
 ```
 
 Instala un paquete usando renv

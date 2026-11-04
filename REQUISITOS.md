@@ -1,19 +1,55 @@
 # Requisitos
 
-## Requisito obligatorio antes del curso
+## Requisitos antes del curso
 
-Es obligatorio tener una **cuenta de GitHub** antes de comenzar el curso. La usaremos para:
+Antes de comenzar, asegurate de contar con:
 
-- Acceder al repositorio del curso.
-- Trabajar con Git y GitHub.
-- Usar **GitHub Codespaces** como entorno de desarrollo.
-- Guardar y administrar tu propio código durante los ejercicios.
+- Una **cuenta de GitHub**.
+- **GitHub CLI (`gh`)** instalado y con la sesión iniciada.
+- **Docker** instalado y con la sesión iniciada en Docker Hub.
 
-Crea una cuenta en: https://github.com/
+Crea una cuenta de GitHub en: https://github.com/
+
+## Instalación en tu computadora
+
+Instala GitHub CLI y Docker antes del curso. En Windows, usa WSL 2 y asegúrate de que ambas herramientas estén disponibles en el entorno donde ejecutarás los ejercicios:
+
+- **Windows:** instala y usa **WSL 2**. Instala Docker Desktop y habilita la integración con tu distribución de WSL. Instala GitHub CLI en el entorno que usarás para trabajar.
+- **Linux/Unix:** instala Docker Engine y GitHub CLI siguiendo las instrucciones para tu distribución. En Linux puedes usar este instalador rápido de Docker:
+
+  ```bash
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sh get-docker.sh
+  rm get-docker.sh
+  ```
+
+  Consulta el proyecto oficial: https://github.com/docker/docker-install
+- **macOS:** instala Docker Desktop y GitHub CLI.
+
+Instrucciones oficiales:
+
+- GitHub CLI: https://github.com/cli/cli#installation
+- Docker Desktop para Windows con WSL 2: https://docs.docker.com/desktop/setup/install/windows-install/
+- Docker Engine para Linux: https://docs.docker.com/engine/install/
+- Docker Desktop para Mac: https://docs.docker.com/desktop/setup/install/mac-install/
+
+Durante el curso usaremos GitHub Codespaces y también clonaremos el proyecto en tu computadora para ejecutar allí los mismos pasos y comprobar su reproducibilidad. Por eso, debes instalar GitHub CLI y Docker localmente, además de tenerlos disponibles en el entorno que uses.
+
+Comprueba que las herramientas estén instaladas e inicia sesión en tu entorno local:
+
+```bash
+gh --version
+gh auth login
+gh auth status
+docker --version
+docker login
+```
+
+`gh auth status` debe confirmar que la sesión de GitHub está activa. `docker login` debe completarse correctamente para autenticarte en Docker Hub.
 
 ## Preparativos que puedes hacer antes o durante el curso
 
-No es necesario tener listos los siguientes servicios y accesos antes de comenzar; podrás configurarlos durante el curso, cuando los necesitemos.
+Podrás configurar durante el curso los servicios y accesos adicionales que necesitemos.
 
 ## GitHub Codespaces
 
@@ -29,7 +65,7 @@ Si usas Codespaces, no necesitas instalar R ni VS Code en tu computadora.
 
 ## Cuenta de Docker Hub
 
-Para los ejercicios de Docker y contenerización necesitas una **cuenta de Docker Hub**.
+Para iniciar sesión en Docker y realizar los ejercicios de contenerización necesitas una **cuenta de Docker Hub**. Esta cuenta es obligatoria antes de comenzar.
 
 Puedes usar tu **cuenta de GitHub para registrarte o iniciar sesión en Docker Hub**.
 
@@ -44,23 +80,23 @@ Durante el curso usarás Docker Hub para:
 
 ## Token de acceso personal (PAT) de Docker Hub
 
-Debes crear un **token de acceso personal (PAT, por sus siglas en inglés)** en Docker Hub.
+Se recomienda crear un **token de acceso personal (PAT, por sus siglas en inglés)** en Docker Hub.
 
-Usarás este token en lugar de tu contraseña de Docker Hub para autenticarte desde entornos de desarrollo como GitHub Codespaces.
+Puedes usar este token en lugar de tu contraseña de Docker Hub para autenticarte, especialmente desde entornos de desarrollo como GitHub Codespaces.
 
 Ten a mano la siguiente información:
 
 - Tu nombre de usuario de Docker Hub.
-- Tu token de acceso personal (PAT) de Docker Hub.
+- Tu token de acceso personal (PAT) de Docker Hub, si lo usarás para iniciar sesión.
 
 > **Importante:** Trata tu PAT como una contraseña. No lo incluyas directamente en scripts, archivos Dockerfile ni repositorios de Git, y nunca lo subas a GitHub.
 
 ## Lista de verificación
 
-Antes de comenzar, solo necesitas tener una cuenta de GitHub. Los demás elementos puedes prepararlos antes o durante el curso:
+Antes de comenzar, asegúrate de cumplir todos estos requisitos:
 
 - [ ] Una cuenta de GitHub.
-- [ ] Acceso a GitHub Codespaces.
+- [ ] GitHub CLI (`gh`) instalado y con la sesión iniciada; `gh auth status` confirma que está autenticado.
+- [ ] Docker instalado y con la sesión iniciada en Docker Hub mediante `docker login`.
 - [ ] Una cuenta de Docker Hub.
-- [ ] Un token de acceso personal (PAT) de Docker Hub.
-- [ ] Tu nombre de usuario de Docker Hub.
+- [ ] Tu nombre de usuario de Docker Hub y tu token de acceso personal (PAT).
