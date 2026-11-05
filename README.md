@@ -1,446 +1,105 @@
-# Viernes de Bioinformática - 13 de noviembre de 2026
+# Requisitos
 
-## Bioinformatica reproducible con R: “Del codigo al contenedor”
+## Requisitos antes del curso
 
-Este repositorio ofrece una introducción práctica al desarrollo y despliegue de aplicaciones con R.
+Antes de comenzar, asegurate de contar con:
 
-A partir de la configuración del entorno de R, el curso cubrirá progresivamente:
+- Una **cuenta de GitHub**, que usarás para GitHub y que también puedes usar para registrarte o iniciar sesión en Docker Hub.
+- **GitHub CLI (`gh`)** instalado y con la sesión iniciada.
+- **Docker** instalado y con la sesión iniciada en Docker Hub.
+- **Positron** instalado.
 
-1. Instalar y administrar versiones de R con [**rig**](https://rig.r-lib.org/).
-2. Crear entornos reproducibles para proyectos con [**renv**](https://rstudio.github.io/renv/articles/renv.html).
-3. Aprender los fundamentos de [**box**](https://klmr.me/box/).
-5. Introduccion a [**Docker**](https://hub.docker.com/).
-4. Contenerizar la aplicación con **Docker**.
-6. Preparar la aplicación para su despliegue en [Docker Hub](https://hub.docker.com/).
+Crea una cuenta de GitHub en: https://github.com/
 
-El objetivo es ofrecer una ruta práctica desde los conceptos básicos de hasta una aplicación reproducible y contenerizada usando R como lenguaje. También se presentan el uso de librerias como `renv` para entornos reproducibles, módulos con `box` y finalmente crear una imagen `docker` para su reproducibilidad.
+## Instalación en tu computadora
 
-## Antes de empezar: GitHub y tu primer commit
+Instala GitHub CLI y Docker antes del curso. En Windows, usa WSL 2 y asegúrate de que ambas herramientas estén disponibles en el entorno donde ejecutarás los ejercicios:
 
-Antes de comenzar los ejercicios, configuraremos GitHub CLI (`gh`) y crearás un repositorio propio en GitHub. Usaremos este `README.md` como contenido inicial para hacer tu primer commit.
+- **Windows:** instala y usa **WSL 2**. Instala Docker Desktop y habilita la integración con tu distribución de WSL. Instala GitHub CLI en el entorno que usarás para trabajar.
+- **Linux/Unix:** instala Docker Engine y GitHub CLI siguiendo las instrucciones para tu distribución. En Linux puedes usar este instalador rápido de Docker:
 
-Inicia sesión con tu cuenta de GitHub y comprueba la autenticación:
+  ```bash
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sh get-docker.sh
+  rm get-docker.sh
+  ```
+
+  Consulta el proyecto oficial: https://github.com/docker/docker-install
+- **macOS:** instala Docker Desktop y GitHub CLI.
+
+Descarga e instala [Positron](https://positron.posit.co/download.html).
+
+Instrucciones oficiales:
+
+- GitHub CLI: https://github.com/cli/cli#installation
+- Docker Desktop para Windows con WSL 2: https://docs.docker.com/desktop/setup/install/windows-install/
+- Docker Engine para Linux: https://docs.docker.com/engine/install/
+- Docker Desktop para Mac: https://docs.docker.com/desktop/setup/install/mac-install/
+
+Durante el curso usaremos GitHub Codespaces y también clonaremos el proyecto en tu computadora para ejecutar allí los mismos pasos y comprobar su reproducibilidad. Por eso, debes instalar GitHub CLI y Docker localmente, además de tenerlos disponibles en el entorno que uses.
+
+Comprueba que las herramientas estén instaladas e inicia sesión en tu entorno local:
 
 ```bash
+gh --version
 gh auth login
 gh auth status
-```
-
-Crea un repositorio público y clónalo en tu computadora. Puedes llamarlo `viernes` o el nombre que quieras usar:
-
-```bash
-gh repo create viernes --public --clone
-cd viernes
-```
-
-Copia el archivo `README.md` de este repositorio del curso a la carpeta `viernes`. Luego registra el archivo, crea el commit inicial y súbelo a GitHub:
-
-```bash
-git add README.md
-git commit -m "Add initial README"
-git push -u origin HEAD
-```
-
-Así tendrás tu propio repositorio con este README como primer cambio registrado en Git.
-
-## Comandos útiles: `rig`, `renv` y Docker
-
-Estos son algunos comandos frecuentes durante el curso. Los comentarios indican para qué sirve cada uno.
-
-### Administrar versiones de R con `rig`
-
-```bash
-rig available       # Muestra las versiones de R que se pueden instalar.
-rig list            # Lista las versiones de R instaladas.
-rig add 4.6.1       # Instala R 4.6.1.
-rig default 4.6.1   # Selecciona R 4.6.1 como versión predeterminada.
-```
-
-### Administrar paquetes y reproducibilidad con `renv`
-
-Ejecuta estos comandos en la consola de R desde el proyecto:
-
-```r
-renv::status()                  # Comprueba si los paquetes instalados coinciden con renv.lock.
-renv::restore()                 # Instala las versiones de paquetes registradas en renv.lock.
-renv::install("ggplot2")        # Instala un paquete en el entorno del proyecto.
-renv::snapshot()                # Guarda en renv.lock las versiones actuales del proyecto.
-```
-
-### Trabajar con imágenes y contenedores Docker
-
-Ejecuta estos comandos en la terminal:
-
-```bash
-docker --version                       # Muestra la versión de Docker instalada.
-docker login                           # Inicia sesión en Docker Hub.
-docker images                          # Lista las imágenes disponibles localmente.
-docker ps -a                           # Lista los contenedores, incluidos los detenidos.
-docker run --rm hello-world            # Ejecuta una imagen de prueba y elimina el contenedor al terminar.
-docker build -t mi-imagen:1.0 .        # Construye una imagen desde el Dockerfile del directorio actual.
-docker push tu_usuario/mi-imagen:1.0   # Publica la imagen en Docker Hub.
-docker system prune -a                 # Borra todas las imagenes y cache del sistema
-```
-
-## 1. Instalar [`rig`](https://rig.r-lib.org/)
-
-Instala el administrador de instalaciones de R:
-
-```bash
-curl -LsSf https://r-lib.github.io/rig/install.sh | sh
-```
-
-Instala R 4.6.1:
-
-```bash
-rig available
-rig add 4.6.1
-rig list
-```
-
----
-
-## 2. Instalar las dependencias de R para VS Code
-
-Inicia R e instala los paquetes necesarios para el entorno de desarrollo de R en VS Code:
-
-```bash
-code --install-extension REditorSupport.r --force
-```
-### Dependencia para R development R
-```bash
-sudo apt-get install -y libtiff-dev libuv1-dev libgit2-dev build-essential zlib1g-dev libbz2-dev liblzma-dev libdeflate-dev libcurl4-openssl-dev
-```
-
----
-
-## 3. Inicializar [`renv`](https://rstudio.github.io/renv/articles/renv.html)
-
-Instala `renv`:
-
-```r
-install.packages("renv")
-```
-
-Inicializa el entorno del proyecto:
-
-```r
-# Cran packages
-renv::init()
-
-# Si quieres incluir packages en Bioconductor
-renv::init(bioconductor = TRUE)
-```
-
-Instala un paquete usando renv
-
-```r
-renv::install("<package-name>")
-renv::install("jsonlite")
-```
-```r
-renv::install(c(
-  "languageserver",
-  "httpgd",
-  "ps",
-  "jsonlite",
-  "processx"
-))
-```
-```r
-renv::settings$ignored.packages(c(
-  "languageserver", 
-  "httpgd", 
-  "ps", 
-  "jsonlite", 
-  "processx"
-))
-```
-```r
-# reset all
-renv::settings$ignored.packages(character())
-# list ignored packages
-renv::settings$ignored.packages()
-```
-
-Guarda las versiones de los paquetes en `renv.lock`:
-
-```r
-renv::snapshot()
-```
-
----
-
-## 4. Instalar paquetes del curso
-
-Con el proyecto activado con `renv`, instala `box` para organizar el código en módulos, `dplyr` para transformar datos y `ggplot2` para crear visualizaciones:
-
-```r
-renv::install(c("box", "dplyr", "ggplot2"))
-```
-
-Registra las versiones instaladas para que otras personas puedan reproducir el entorno:
-
-```r
-renv::snapshot()
-```
-
-## 5. Organizar el código en módulos con [`box`](https://klmr.me/box/)
-
-`box` permite separar el código en archivos reutilizables llamados módulos. Cada módulo puede contener funciones relacionadas; después, otro archivo lo importa y utiliza sus funciones. Esta organización ayuda a mantener más legibles los proyectos del curso a medida que crecen.
-
-Por ejemplo, crea el archivo `modules/expression_summary.R` con una función para calcular la expresión media por gen:
-
-```r
-summarize_expression <- function(data) {
-  data |>
-    dplyr::group_by(gene) |>
-    dplyr::summarise(
-      mean_expression = mean(expression),
-      .groups = "drop"
-    )
-}
-```
-
-Desde otro archivo R, importa el módulo y llama a la función:
-
-```r
-box::use(./modules/expression_summary)
-
-expression_data <- data.frame(
-  gene = c("BRCA1", "BRCA1", "TP53", "TP53"),
-  expression = c(8.2, 9.1, 5.4, 6.0)
-)
-
-expression_summary$summarize_expression(expression_data)
-```
-
-La ruta `./modules/expression_summary` corresponde al archivo `modules/expression_summary.R`, sin escribir la extensión `.R`. En este ejemplo, el módulo usa `dplyr` con su espacio de nombres explícito (`dplyr::`), así que no es necesario cargarlo con `library()` dentro del módulo.
-
-## 6. Ejemplos con `dplyr` y `ggplot2`
-
-Los siguientes ejemplos usan datos pequeños creados en el propio código para que puedan ejecutarse sin descargar archivos adicionales.
-
-### Ejemplo 1: expresión media por gen
-
-Agrupa las mediciones por gen, calcula la expresión media y representa los resultados en un gráfico de barras:
-
-```r
-library(dplyr)
-library(ggplot2)
-
-expression_data <- data.frame(
-  gene = c("BRCA1", "BRCA1", "TP53", "TP53", "EGFR", "EGFR"),
-  expression = c(8.2, 9.1, 5.4, 6.0, 7.3, 8.1)
-)
-
-mean_expression <- expression_data |>
-  group_by(gene) |>
-  summarise(mean_expression = mean(expression), .groups = "drop")
-
-ggplot(mean_expression, aes(x = gene, y = mean_expression, fill = gene)) +
-  geom_col(show.legend = FALSE) +
-  labs(
-    title = "Expresión media por gen",
-    x = "Gen",
-    y = "Expresión media"
-  ) +
-  theme_minimal()
-```
-
-### Ejemplo 2: número de lecturas por muestra
-
-Suma los conteos de lecturas de los genes por muestra y compara los totales en un gráfico:
-
-```r
-library(dplyr)
-library(ggplot2)
-
-read_counts <- data.frame(
-  sample = c("Muestra 1", "Muestra 1", "Muestra 1",
-             "Muestra 2", "Muestra 2", "Muestra 2"),
-  gene = c("BRCA1", "TP53", "EGFR", "BRCA1", "TP53", "EGFR"),
-  reads = c(120, 85, 64, 98, 110, 72)
-)
-
-counts_by_sample <- read_counts |>
-  group_by(sample) |>
-  summarise(total_reads = sum(reads), .groups = "drop")
-
-ggplot(counts_by_sample, aes(x = sample, y = total_reads, fill = sample)) +
-  geom_col(show.legend = FALSE) +
-  labs(
-    title = "Lecturas totales por muestra",
-    x = "Muestra",
-    y = "Número de lecturas"
-  ) +
-  theme_minimal()
-```
-
-### Ejemplo 3: control de calidad de mediciones
-
-Clasifica las mediciones según un umbral, calcula la proporción que lo supera en cada muestra y compara los resultados:
-
-```r
-library(dplyr)
-library(ggplot2)
-
-quality_data <- data.frame(
-  sample = c("Muestra 1", "Muestra 1", "Muestra 1",
-             "Muestra 2", "Muestra 2", "Muestra 2"),
-  measurement = c(12.4, 9.8, 11.1, 8.5, 10.6, 12.0)
-)
-
-quality_summary <- quality_data |>
-  mutate(passes_threshold = measurement >= 10) |>
-  group_by(sample) |>
-  summarise(
-    passing_fraction = mean(passes_threshold),
-    .groups = "drop"
-  )
-
-ggplot(quality_summary, aes(x = sample, y = passing_fraction, fill = sample)) +
-  geom_col(show.legend = FALSE) +
-  scale_y_continuous(limits = c(0, 1)) +
-  labs(
-    title = "Proporción de mediciones que superan el umbral",
-    x = "Muestra",
-    y = "Proporción"
-  ) +
-  theme_minimal()
-```
-
-## 7. Introducción a [Docker](https://hub.docker.com/)
-
-Docker permite empaquetar una aplicación y sus dependencias en una **imagen**. Al ejecutar esa imagen se crea un **contenedor**. La imagen sirve como plantilla; el contenedor es una instancia en ejecución (o ya finalizada) de esa plantilla.
-
-### Instalar y comprobar Docker
-
-Instala Docker Desktop o Docker Engine siguiendo las instrucciones oficiales para tu sistema operativo: [Instalar Docker](https://docs.docker.com/engine/install/). Después, comprueba que Docker está disponible y que el motor se está ejecutando:
-
-```bash
 docker --version
-```
-```bash
-docker run --rm hello-world
+docker login
 ```
 
-`hello-world` es una imagen de prueba. La opción `--rm` elimina automáticamente el contenedor al terminar.
+`gh auth status` debe confirmar que la sesión de GitHub está activa. `docker login` debe completarse correctamente para autenticarte en Docker Hub.
 
-### Crear una imagen de ejemplo con `cowsay`
+## Preparativos que puedes hacer antes o durante el curso
 
-En la raíz del proyecto, crea un archivo llamado `Dockerfile` con este contenido. El archivo describe cómo construir una imagen Debian que incluye `cowsay`:
+Podrás configurar durante el curso los servicios y accesos adicionales que necesitemos.
 
-```dockerfile
-FROM debian:bookworm-slim
+## Cuenta de Docker Hub
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends cowsay \
-    && rm -rf /var/lib/apt/lists/*
+Para iniciar sesión en Docker y realizar los ejercicios de contenerización necesitas una **cuenta de Docker Hub**. Esta cuenta es obligatoria antes de comenzar. Puedes usar tu cuenta de GitHub para crearla o iniciar sesión: así usarás tu cuenta de GitHub tanto para las actividades de GitHub como para acceder a Docker Hub.
 
-ENTRYPOINT ["/usr/games/cowsay"]
-CMD ["¡Hola desde Docker!"]
-```
+Docker Hub es un servicio aparte, por lo que debes completar el registro o vincular tu cuenta de GitHub en Docker Hub:
 
-Construye la imagen y asígnale el nombre `curso-cowsay` y la etiqueta `1.0`:
+Crea una cuenta o accede a la tuya en: https://hub.docker.com/
+
+Para autenticarte en Docker Hub, ejecuta uno de estos comandos:
 
 ```bash
-docker build -t curso-cowsay:1.0 .
+# Necesitas PAT
+docker login -u usuario
+# O inicia sesión de forma interactiva:
+docker login
 ```
 
-El punto final indica que Docker debe usar el directorio actual como contexto de construcción. Ejecuta la imagen; el texto opcional reemplaza el mensaje predeterminado:
+Si tu nombre de usuario de Docker Hub no es `dmontielg`, reemplázalo por el tuyo.
 
-```bash
-docker run --rm curso-cowsay:1.0 "¡Hola, curso de viernes bioinformática!"
-```
+Durante el curso usarás Docker Hub para:
 
-### Descargar y listar imágenes
+- Autenticarte en Docker.
+- Crear y administrar imágenes de Docker.
+- Subir imágenes a Docker Hub.
+- Descargar imágenes desde Docker Hub.
 
-`docker pull` descarga una imagen del registro de [Docker Hub](https://hub.docker.com/). `docker images` muestra las imágenes disponibles localmente:
+## Token de acceso personal (PAT) de Docker Hub
 
-```bash
-docker pull debian:bookworm-slim
-```
-```bash
-docker images
-```
+Se recomienda crear un **token de acceso personal (PAT, por sus siglas en inglés)** en Docker Hub.
 
-### Ejecutar y listar contenedores
+Puedes usar este token en lugar de tu contraseña de Docker Hub para autenticarte, especialmente desde entornos de desarrollo como GitHub Codespaces.
 
-`docker run` crea y ejecuta un contenedor a partir de una imagen. En el ejemplo anterior, `cowsay` termina inmediatamente después de mostrar el mensaje; por eso, no aparecerá en la lista de contenedores activos. Para ver los contenedores finalizados, usa `docker ps -a`.
+Ten a mano la siguiente información:
 
-```bash
-docker run -d --name cowsay-demo curso-cowsay:1.0
+- Tu nombre de usuario de Docker Hub.
+- Tu token de acceso personal (PAT) de Docker Hub, si lo usarás para iniciar sesión.
 
-# Desde Docker hub
-docker run rancher/cowsay:latest
-docker run rancher/cowsay:latest "hola docker"
-docker run rancher/cowsay:latest -l
-docker run rancher/cowsay:latest -f "dragon-and-cow" "hola mundo"
-docker ps
-```
+> **Importante:** Trata tu PAT como una contraseña. No lo incluyas directamente en scripts, archivos Dockerfile ni repositorios de Git, y nunca lo subas a GitHub.
 
-En este comando se reemplaza temporalmente el punto de entrada `cowsay` por una shell que imprime un mensaje y espera 300 segundos. La opción `-d` ejecuta el contenedor en segundo plano y `--name` le asigna un nombre fácil de recordar. Algunos comandos útiles para consultar y administrar contenedores son:
+## Lista de verificación
 
-```bash
-docker ps -a
-docker logs cowsay-demo
-docker stop cowsay-demo
-docker rm cowsay-demo
-```
+Antes de comenzar, asegúrate de cumplir todos estos requisitos:
 
-`docker logs` muestra la salida del contenedor; `docker stop` lo detiene y `docker rm` elimina el contenedor detenido. Para borrar la imagen de ejemplo cuando ya no la necesites, primero asegúrate de que no haya contenedores que la estén usando:
-
-```bash
-docker rmi curso-cowsay:1.0
-```
-
-Ahora usemos una imagen de `Rstudio` sin instalarlo.
-
-```bash
-docker run --rm -p 8787:8787 -e PASSWORD=test rocker/rstudio:4
-docker run --rm -p 8787:8787 -e PASSWORD=test -v $PWD:/home/rstudio/ rocker/rstudio:4
-```
-
-### Crear un Dockerfile con `dockerfiler`
-
-El paquete de R [`dockerfiler`](https://github.com/ThinkR-open/dockerfiler) permite generar de forma sencilla un `Dockerfile` para un proyecto. Si el proyecto usa `renv`, puedes crear el archivo a partir de su lockfile:
-
-```r
-renv::install("ThinkR-open/dockerfiler")
-
-library(dockerfiler)
-
-my_dock <- dock_from_renv(lockfile = "renv.lock", user = NULL)
-my_dock
-my_dock$write("Dockerfile")
-```
-
-### Construir y publicar la imagen en Docker Hub
-
-Antes de continuar, asegúrate de tener a mano tu usuario de Docker Hub y tu PAT. Inicia sesión con tu usuario; cuando Docker solicite la contraseña, introduce el PAT:
-
-```bash
-docker login --username tu_usuario
-```
-
-Desde el directorio que contiene el `Dockerfile`, construye la imagen con el nombre de tu cuenta y una etiqueta:
-
-```bash
-docker build -t tu_usuario/mi-imagen:1.0 .
-```
-
-Publica la imagen en Docker Hub:
-
-```bash
-docker push tu_usuario/mi-imagen:1.0
-```
-
-Reemplaza `tu_usuario` por tu nombre de usuario de Docker Hub. No escribas el PAT en el comando, en el `Dockerfile` ni en el repositorio.
-
-## Recursos
-
-* Advanced R https://adv-r.hadley.nz/index.html
-* Mastering Shiny https://mastering-shiny.org/basic-app.html
-* Engineering Production-Grade Shiny Apps https://engineering-shiny.org/index.html
-* Instalacion facil de Docker (Para Linux/WSL2) https://github.com/docker/docker-install
+- [ ] Una cuenta de GitHub para GitHub y para registrarte o iniciar sesión en Docker Hub.
+- [ ] GitHub CLI (`gh`) instalado y con la sesión iniciada; `gh auth status` confirma que está autenticado.
+- [ ] Docker instalado y con la sesión iniciada en Docker Hub mediante `docker login`.
+- [ ] Positron instalado: [descarga Positron](https://positron.posit.co/download.html).
+- [ ] Una cuenta de Docker Hub.
+- [ ] Tu nombre de usuario de Docker Hub y tu token de acceso personal (PAT).
