@@ -1,4 +1,6 @@
-# Requisitos
+# Requisitos: Viernes de Bioinformática - 13 de noviembre de 2026
+
+## Bioinformatica reproducible con R: “Del codigo al contenedor”
 
 ## Requisitos antes del curso
 
