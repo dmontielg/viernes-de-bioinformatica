@@ -99,4 +99,3 @@ Antes de comenzar, asegúrate de cumplir todos estos requisitos:
 - [ ] Git instalado; `git --version` confirma que está disponible.
 - [ ] Docker instalado y con la sesión iniciada en Docker Hub mediante `docker login`.
 - [ ] Positron instalado: [descarga Positron](https://positron.posit.co/download.html).
-- [ ] Tu nombre de usuario de Docker Hub y tu token de acceso personal (PAT).
