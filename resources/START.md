@@ -1,196 +1,357 @@
-# Viernes de Bioinformática - 13 de noviembre de 2026
+# Viernes de Bioinformática
 
-## Bioinformatica reproducible con R: “Del codigo al contenedor”
+**Fecha:** 13 de noviembre de 2026  
+**Curso:** Bioinformática reproducible con R: *Del código al contenedor*
 
-Este repositorio ofrece una introducción práctica al desarrollo y despliegue de aplicaciones con R.
+## Introducción
 
-A partir de la configuración del entorno de R, el curso cubrirá progresivamente:
+Este repositorio contiene el material práctico del curso **Bioinformática reproducible con R: Del código al contenedor**.
 
-1. Instalar y administrar versiones de R con [**rig**](https://rig.r-lib.org/).
-2. Crear entornos reproducibles para proyectos con [**renv**](https://rstudio.github.io/renv/articles/renv.html).
-3. Aprender los fundamentos de [**box**](https://klmr.me/box/).
-5. Introduccion a [**Docker**](https://hub.docker.com/).
-4. Contenerizar la aplicación con **Docker**.
-6. Preparar la aplicación para su despliegue en [Docker Hub](https://hub.docker.com/).
+El objetivo es recorrer progresivamente diferentes niveles de reproducibilidad en un proyecto de R:
 
-El objetivo es ofrecer una ruta práctica desde los conceptos básicos de hasta una aplicación reproducible y contenerizada usando R como lenguaje. También se presentan el uso de librerias como `renv` para entornos reproducibles, módulos con `box` y finalmente crear una imagen `docker` para su reproducibilidad.
+1. Administrar versiones de R con [`rig`](https://rig.r-lib.org/).
+2. Gestionar dependencias y entornos reproducibles con [`renv`](https://rstudio.github.io/renv/articles/renv.html).
+3. Organizar código R en módulos reutilizables con [`box`](https://klmr.me/box/).
+4. Utilizar Git y GitHub para control de versiones.
+5. Introducir los conceptos fundamentales de Docker.
+6. Contenerizar un proyecto de R.
+7. Publicar una imagen en [Docker Hub](https://hub.docker.com/).
 
-## Requisito: instalar Git
+Al finalizar el curso tendremos un proyecto de R versionado con Git, con sus dependencias registradas mediante `renv`, organizado mediante módulos y preparado para ejecutarse dentro de un contenedor Docker.
 
-Instala Git siguiendo las [instrucciones oficiales](https://git-scm.com/downloads/linux). En Ubuntu o Debian, puedes instalarlo desde la terminal:
+---
 
-```bash
-sudo apt-get update
-sudo apt-get install -y git
-```
+# 1. Preparar el repositorio Git
 
-Comprueba que se instaló correctamente:
+Antes de comenzar los ejercicios, crearemos un repositorio para ir registrando los cambios realizados durante el curso.
+
+> Los requisitos de instalación de Git, Docker, Positron y WSL 2 se encuentran en el documento de requisitos del curso.
+
+## Configurar Git
+
+Comprueba que Git está instalado:
 
 ```bash
 git --version
 ```
 
-## Antes de empezar: GitHub y tu primer commit
-
-Crea un repositorio público llamado `viernes` (o el nombre que quieras) desde [GitHub](https://github.com/new). Clónalo en tu computadora, copia el `README.md` de este repositorio del curso a la carpeta clonada y registra el archivo:
+Configura tu nombre y correo electrónico:
 
 ```bash
-git clone https://github.com/<tu-usuario>/viernes.git
-cd viernes
-git add README.md
-git commit -m "Add initial README"
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu-correo@ejemplo.com"
+```
+
+Puedes revisar la configuración con:
+
+```bash
+git config --global --list
+```
+
+## Crear el repositorio en GitHub
+
+Crea un nuevo repositorio en GitHub:
+
+https://github.com/new
+
+Por ejemplo, puedes llamarlo:
+
+```text
+viernes-bioinformatica
+```
+
+Clona el repositorio:
+
+```bash
+git clone https://github.com/<tu-usuario>/viernes-bioinformatica.git
+```
+
+Accede al directorio:
+
+```bash
+cd viernes-bioinformatica
+```
+
+Después de añadir el material inicial del curso:
+
+```bash
+git status
+git add .
+git commit -m "Add initial course files"
 git push -u origin HEAD
 ```
 
-Así tendrás tu propio repositorio con este README como primer cambio registrado en Git.
+A partir de este momento podremos utilizar Git para registrar los cambios realizados durante los ejercicios.
 
-## Comandos útiles: `rig`, `renv` y Docker
+---
 
-Estos son algunos comandos frecuentes durante el curso. Los comentarios indican para qué sirve cada uno.
+# 2. Administrar versiones de R con `rig`
 
-### Administrar versiones de R con `rig`
+[`rig`](https://rig.r-lib.org/) es un administrador de instalaciones de R que permite instalar y mantener diferentes versiones de R en el mismo sistema.
 
-```bash
-rig available       # Muestra las versiones de R que se pueden instalar.
-rig list            # Lista las versiones de R instaladas.
-rig add 4.6.1       # Instala R 4.6.1.
-rig default 4.6.1   # Selecciona R 4.6.1 como versión predeterminada.
-```
-
-### Administrar paquetes y reproducibilidad con `renv`
-
-Ejecuta estos comandos en la consola de R desde el proyecto:
-
-```r
-renv::status()                  # Comprueba si los paquetes instalados coinciden con renv.lock.
-renv::restore()                 # Instala las versiones de paquetes registradas en renv.lock.
-renv::install("ggplot2")        # Instala un paquete en el entorno del proyecto.
-renv::snapshot()                # Guarda en renv.lock las versiones actuales del proyecto.
-```
-
-### Trabajar con imágenes y contenedores Docker
-
-Ejecuta estos comandos en la terminal:
+Comprueba si `rig` está instalado:
 
 ```bash
-docker --version                       # Muestra la versión de Docker instalada.
-docker login                           # Inicia sesión en Docker Hub.
-docker images                          # Lista las imágenes disponibles localmente.
-docker ps -a                           # Lista los contenedores, incluidos los detenidos.
-docker run --rm hello-world            # Ejecuta una imagen de prueba y elimina el contenedor al terminar.
-docker build -t mi-imagen:1.0 .        # Construye una imagen desde el Dockerfile del directorio actual.
-docker push tu_usuario/mi-imagen:1.0   # Publica la imagen en Docker Hub.
-docker system prune -a                 # Borra todas las imagenes y cache del sistema
+rig --version
 ```
 
-## 1. Instalar [`rig`](https://rig.r-lib.org/)
+Consulta las versiones de R disponibles:
 
-Instala el administrador de instalaciones de R:
+```bash
+rig available
+```
+
+Consulta las versiones instaladas:
+
+```bash
+rig list
+```
+
+Por ejemplo, para instalar R 4.6.1:
+
+```bash
+rig add 4.6.1
+```
+
+Comprueba nuevamente las versiones instaladas:
+
+```bash
+rig list
+```
+
+Puedes establecer una versión como predeterminada:
+
+```bash
+rig default 4.6.1
+```
+
+Comprueba qué versión de R se está utilizando:
+
+```bash
+R --version
+```
+
+## Instalación de `rig`
+
+Si todavía no tienes `rig` instalado, consulta las instrucciones oficiales:
+
+https://rig.r-lib.org/
+
+En sistemas compatibles con el instalador mediante shell:
 
 ```bash
 curl -LsSf https://r-lib.github.io/rig/install.sh | sh
 ```
 
-Instala R 4.6.1:
+---
+
+# 3. Preparar las dependencias del sistema para R
+
+Algunos paquetes de R necesitan bibliotecas del sistema para poder compilarse.
+
+En Ubuntu o Debian podemos instalar algunas dependencias habituales con:
 
 ```bash
-rig available
-rig add 4.6.1
-rig list
+sudo apt-get update
+
+sudo apt-get install -y \
+    build-essential \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libdeflate-dev \
+    libcurl4-openssl-dev \
+    libgit2-dev \
+    libtiff-dev \
+    libuv1-dev
 ```
+
+> No todos los paquetes de R necesitan estas dependencias. Las instalamos en este curso para disponer de un entorno preparado para compilar paquetes que las requieran.
 
 ---
 
-## 2. Instalar las dependencias de R para VS Code
+# 4. Crear un entorno reproducible con `renv`
 
-Inicia R e instala los paquetes necesarios para el entorno de desarrollo de R en VS Code:
+[`renv`](https://rstudio.github.io/renv/articles/renv.html) permite gestionar las dependencias de un proyecto de R de forma aislada y reproducible.
 
-```bash
-code --install-extension REditorSupport.r --force
-```
-### Dependencia para R development R
-```bash
-sudo apt-get install -y libtiff-dev libuv1-dev libgit2-dev build-essential zlib1g-dev libbz2-dev liblzma-dev libdeflate-dev libcurl4-openssl-dev
+El archivo principal generado por `renv` es:
+
+```text
+renv.lock
 ```
 
----
+Este archivo registra las versiones de R y de los paquetes utilizados por el proyecto.
 
-## 3. Inicializar [`renv`](https://rstudio.github.io/renv/articles/renv.html)
+## Instalar `renv`
 
-Instala `renv`:
+Desde la consola de R:
 
 ```r
 install.packages("renv")
 ```
 
-Inicializa el entorno del proyecto:
+## Inicializar el proyecto
+
+Ejecuta:
 
 ```r
-# Cran packages
 renv::init()
+```
 
-# Si quieres incluir packages en Bioconductor
+Esto inicializa `renv` en el proyecto.
+
+Para proyectos que utilizan Bioconductor, también puedes inicializarlo indicando la versión de Bioconductor:
+
+```r
 renv::init(bioconductor = TRUE)
 ```
 
-Instala un paquete usando renv
+## Instalar paquetes
+
+Con `renv` activo podemos instalar paquetes dentro del entorno del proyecto.
+
+Por ejemplo:
 
 ```r
-renv::install("<package-name>")
 renv::install("jsonlite")
 ```
+
+También podemos instalar varios paquetes:
+
 ```r
 renv::install(c(
-  "languageserver",
-  "httpgd",
-  "ps",
-  "jsonlite",
-  "processx"
+  "box",
+  "dplyr",
+  "ggplot2"
 ))
-```
-```r
-renv::settings$ignored.packages(c(
-  "languageserver", 
-  "httpgd", 
-  "ps", 
-  "jsonlite", 
-  "processx"
-))
-```
-```r
-# reset all
-renv::settings$ignored.packages(character())
-# list ignored packages
-renv::settings$ignored.packages()
 ```
 
-Guarda las versiones de los paquetes en `renv.lock`:
+Después de instalar dependencias, registra su estado:
 
 ```r
 renv::snapshot()
+```
+
+Esto actualizará:
+
+```text
+renv.lock
+```
+
+## Comandos principales de `renv`
+
+### Comprobar el estado del proyecto
+
+```r
+renv::status()
+```
+
+### Instalar una dependencia
+
+```r
+renv::install("ggplot2")
+```
+
+### Registrar las dependencias actuales
+
+```r
+renv::snapshot()
+```
+
+### Restaurar un entorno
+
+Si clonamos el proyecto en otro ordenador:
+
+```r
+renv::restore()
+```
+
+`renv` instalará las versiones registradas en `renv.lock`.
+
+El flujo básico es:
+
+```text
+Instalar paquetes
+       ↓
+renv::snapshot()
+       ↓
+renv.lock
+       ↓
+Git
+       ↓
+Otro ordenador
+       ↓
+renv::restore()
 ```
 
 ---
 
-## 4. Instalar paquetes del curso
+# 5. Paquetes para el entorno de desarrollo
 
-Con el proyecto activado con `renv`, instala `box` para organizar el código en módulos, `dplyr` para transformar datos y `ggplot2` para crear visualizaciones:
+Algunos paquetes son útiles para mejorar la experiencia de desarrollo.
 
-```r
-renv::install(c("box", "dplyr", "ggplot2"))
-```
-
-Registra las versiones instaladas para que otras personas puedan reproducir el entorno:
+Por ejemplo:
 
 ```r
-renv::snapshot()
+renv::install(c(
+  "languageserver",
+  "httpgd"
+))
 ```
 
-## 5. Organizar el código en módulos con [`box`](https://klmr.me/box/)
+Estos paquetes son especialmente útiles en editores que proporcionan integración avanzada con R.
 
-`box` permite separar el código en archivos reutilizables llamados módulos. Cada módulo puede contener funciones relacionadas; después, otro archivo lo importa y utiliza sus funciones. Esta organización ayuda a mantener más legibles los proyectos del curso a medida que crecen.
+Si necesitas excluir determinados paquetes del análisis de dependencias de `renv`, puedes utilizar:
 
-Por ejemplo, crea el archivo `modules/expression_summary.R` con una función para calcular la expresión media por gen:
+```r
+renv::settings$ignored.packages(c(
+  "languageserver",
+  "httpgd"
+))
+```
+
+Para consultar los paquetes ignorados:
+
+```r
+renv::settings$ignored.packages()
+```
+
+Para restablecer la configuración:
+
+```r
+renv::settings$ignored.packages(character())
+```
+
+> Utiliza `ignored.packages` únicamente cuando tengas una razón concreta para excluir esos paquetes del entorno reproducible del proyecto.
+
+---
+
+# 6. Organizar código R con `box`
+
+[`box`](https://klmr.me/box/) permite organizar el código R en módulos reutilizables.
+
+En lugar de concentrar todas las funciones en un único archivo o cargar scripts mediante `source()`, podemos separar responsabilidades en módulos.
+
+Una estructura sencilla podría ser:
+
+```text
+viernes-bioinformatica/
+├── modules/
+│   └── expression_summary.R
+├── analysis.R
+├── renv.lock
+└── README.md
+```
+
+## Crear un módulo
+
+Crea:
+
+```text
+modules/expression_summary.R
+```
+
+con el siguiente contenido:
 
 ```r
 summarize_expression <- function(data) {
@@ -203,43 +364,96 @@ summarize_expression <- function(data) {
 }
 ```
 
-Desde otro archivo R, importa el módulo y llama a la función:
+## Utilizar el módulo
+
+Desde otro archivo R:
 
 ```r
 box::use(./modules/expression_summary)
+```
 
+Creamos algunos datos:
+
+```r
 expression_data <- data.frame(
   gene = c("BRCA1", "BRCA1", "TP53", "TP53"),
   expression = c(8.2, 9.1, 5.4, 6.0)
 )
+```
 
+Y utilizamos la función del módulo:
+
+```r
 expression_summary$summarize_expression(expression_data)
 ```
 
-La ruta `./modules/expression_summary` corresponde al archivo `modules/expression_summary.R`, sin escribir la extensión `.R`. En este ejemplo, el módulo usa `dplyr` con su espacio de nombres explícito (`dplyr::`), así que no es necesario cargarlo con `library()` dentro del módulo.
+La ruta:
 
-## 6. Ejemplos con `dplyr` y `ggplot2`
+```r
+./modules/expression_summary
+```
 
-Los siguientes ejemplos usan datos pequeños creados en el propio código para que puedan ejecutarse sin descargar archivos adicionales.
+corresponde a:
 
-### Ejemplo 1: expresión media por gen
+```text
+modules/expression_summary.R
+```
 
-Agrupa las mediciones por gen, calcula la expresión media y representa los resultados en un gráfico de barras:
+No es necesario escribir la extensión `.R`.
+
+En este ejemplo utilizamos explícitamente:
+
+```r
+dplyr::group_by()
+dplyr::summarise()
+```
+
+Por tanto, el módulo no necesita ejecutar:
+
+```r
+library(dplyr)
+```
+
+---
+
+# 7. Ejemplo práctico en R
+
+Vamos a crear un pequeño análisis reproducible utilizando `dplyr` y `ggplot2`.
+
+## Datos de expresión
 
 ```r
 library(dplyr)
 library(ggplot2)
 
 expression_data <- data.frame(
-  gene = c("BRCA1", "BRCA1", "TP53", "TP53", "EGFR", "EGFR"),
+  gene = c(
+    "BRCA1", "BRCA1",
+    "TP53", "TP53",
+    "EGFR", "EGFR"
+  ),
   expression = c(8.2, 9.1, 5.4, 6.0, 7.3, 8.1)
 )
+```
 
+Calculamos la expresión media:
+
+```r
 mean_expression <- expression_data |>
   group_by(gene) |>
-  summarise(mean_expression = mean(expression), .groups = "drop")
+  summarise(
+    mean_expression = mean(expression),
+    .groups = "drop"
+  )
+```
 
-ggplot(mean_expression, aes(x = gene, y = mean_expression, fill = gene)) +
+Visualizamos el resultado:
+
+```r
+ggplot(
+  mean_expression,
+  aes(x = gene, y = mean_expression, fill = gene)
+) +
   geom_col(show.legend = FALSE) +
   labs(
     title = "Expresión media por gen",
@@ -249,26 +463,42 @@ ggplot(mean_expression, aes(x = gene, y = mean_expression, fill = gene)) +
   theme_minimal()
 ```
 
-### Ejemplo 2: número de lecturas por muestra
+---
 
-Suma los conteos de lecturas de los genes por muestra y compara los totales en un gráfico:
+## Ejemplo: número de lecturas por muestra
 
 ```r
-library(dplyr)
-library(ggplot2)
-
 read_counts <- data.frame(
-  sample = c("Muestra 1", "Muestra 1", "Muestra 1",
-             "Muestra 2", "Muestra 2", "Muestra 2"),
-  gene = c("BRCA1", "TP53", "EGFR", "BRCA1", "TP53", "EGFR"),
+  sample = c(
+    "Muestra 1", "Muestra 1", "Muestra 1",
+    "Muestra 2", "Muestra 2", "Muestra 2"
+  ),
+  gene = c(
+    "BRCA1", "TP53", "EGFR",
+    "BRCA1", "TP53", "EGFR"
+  ),
   reads = c(120, 85, 64, 98, 110, 72)
 )
+```
 
+Agrupamos por muestra:
+
+```r
 counts_by_sample <- read_counts |>
   group_by(sample) |>
-  summarise(total_reads = sum(reads), .groups = "drop")
+  summarise(
+    total_reads = sum(reads),
+    .groups = "drop"
+  )
+```
 
-ggplot(counts_by_sample, aes(x = sample, y = total_reads, fill = sample)) +
+Creamos el gráfico:
+
+```r
+ggplot(
+  counts_by_sample,
+  aes(x = sample, y = total_reads, fill = sample)
+) +
   geom_col(show.legend = FALSE) +
   labs(
     title = "Lecturas totales por muestra",
@@ -278,20 +508,23 @@ ggplot(counts_by_sample, aes(x = sample, y = total_reads, fill = sample)) +
   theme_minimal()
 ```
 
-### Ejemplo 3: control de calidad de mediciones
+---
 
-Clasifica las mediciones según un umbral, calcula la proporción que lo supera en cada muestra y compara los resultados:
+## Ejemplo: control de calidad
 
 ```r
-library(dplyr)
-library(ggplot2)
-
 quality_data <- data.frame(
-  sample = c("Muestra 1", "Muestra 1", "Muestra 1",
-             "Muestra 2", "Muestra 2", "Muestra 2"),
+  sample = c(
+    "Muestra 1", "Muestra 1", "Muestra 1",
+    "Muestra 2", "Muestra 2", "Muestra 2"
+  ),
   measurement = c(12.4, 9.8, 11.1, 8.5, 10.6, 12.0)
 )
+```
 
+Clasificamos las observaciones utilizando un umbral:
+
+```r
 quality_summary <- quality_data |>
   mutate(passes_threshold = measurement >= 10) |>
   group_by(sample) |>
@@ -299,8 +532,15 @@ quality_summary <- quality_data |>
     passing_fraction = mean(passes_threshold),
     .groups = "drop"
   )
+```
 
-ggplot(quality_summary, aes(x = sample, y = passing_fraction, fill = sample)) +
+Visualizamos el resultado:
+
+```r
+ggplot(
+  quality_summary,
+  aes(x = sample, y = passing_fraction, fill = sample)
+) +
   geom_col(show.legend = FALSE) +
   scale_y_continuous(limits = c(0, 1)) +
   labs(
@@ -311,26 +551,108 @@ ggplot(quality_summary, aes(x = sample, y = passing_fraction, fill = sample)) +
   theme_minimal()
 ```
 
-## 7. Introducción a [Docker](https://hub.docker.com/)
+---
 
-Docker permite empaquetar una aplicación y sus dependencias en una **imagen**. Al ejecutar esa imagen se crea un **contenedor**. La imagen sirve como plantilla; el contenedor es una instancia en ejecución (o ya finalizada) de esa plantilla.
+# 8. Guardar el entorno reproducible
 
-### Instalar y comprobar Docker
+Después de añadir nuestro código y dependencias:
 
-Instala Docker Desktop o Docker Engine siguiendo las instrucciones oficiales para tu sistema operativo: [Instalar Docker](https://docs.docker.com/engine/install/). Después, comprueba que Docker está disponible y que el motor se está ejecutando:
+```r
+renv::status()
+```
+
+Si todo está correcto:
+
+```r
+renv::snapshot()
+```
+
+Ahora registramos los cambios con Git:
+
+```bash
+git status
+git add .
+git commit -m "Add reproducible R environment"
+git push
+```
+
+Hasta este punto tenemos:
+
+```text
+Código R
+   +
+Dependencias
+   +
+renv.lock
+   +
+Git
+```
+
+El siguiente paso será reproducir no solo las dependencias de R, sino también el **entorno de ejecución**.
+
+Para ello utilizaremos Docker.
+
+---
+
+# 9. Introducción a Docker
+
+[Docker](https://www.docker.com/) permite empaquetar una aplicación y sus dependencias dentro de una **imagen**.
+
+Al ejecutar una imagen se crea un **contenedor**.
+
+De forma simplificada:
+
+```text
+Dockerfile
+    ↓
+docker build
+    ↓
+Docker image
+    ↓
+docker run
+    ↓
+Container
+```
+
+Podemos pensar en la **imagen** como una plantilla inmutable y en el **contenedor** como una instancia creada a partir de esa imagen.
+
+## Comprobar Docker
+
+Comprueba la versión instalada:
 
 ```bash
 docker --version
 ```
+
+Después ejecuta:
+
 ```bash
 docker run --rm hello-world
 ```
 
-`hello-world` es una imagen de prueba. La opción `--rm` elimina automáticamente el contenedor al terminar.
+La imagen `hello-world` nos permite comprobar que Docker puede descargar y ejecutar correctamente un contenedor.
 
-### Crear una imagen de ejemplo con `cowsay`
+La opción:
 
-En la raíz del proyecto, crea un archivo llamado `Dockerfile` con este contenido. El archivo describe cómo construir una imagen Debian que incluye `cowsay`:
+```text
+--rm
+```
+
+elimina automáticamente el contenedor cuando termina.
+
+---
+
+# 10. Primer Dockerfile
+
+Antes de contenerizar nuestro proyecto de R, construiremos una imagen muy sencilla.
+
+Crea un archivo:
+
+```text
+Dockerfile
+```
+
+con:
 
 ```dockerfile
 FROM debian:bookworm-slim
@@ -340,108 +662,482 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/games/cowsay"]
-CMD ["¡Hola desde Docker!"]
+
+CMD ["Hola desde Docker"]
 ```
 
-Construye la imagen y asígnale el nombre `curso-cowsay` y la etiqueta `1.0`:
+## Construir la imagen
 
 ```bash
 docker build -t curso-cowsay:1.0 .
 ```
 
-El punto final indica que Docker debe usar el directorio actual como contexto de construcción. Ejecuta la imagen; el texto opcional reemplaza el mensaje predeterminado:
+La opción:
 
-```bash
-docker run --rm curso-cowsay:1.0 "¡Hola, curso de viernes bioinformática!"
+```text
+-t curso-cowsay:1.0
 ```
 
-### Descargar y listar imágenes
+establece el nombre y la etiqueta de la imagen.
 
-`docker pull` descarga una imagen del registro de [Docker Hub](https://hub.docker.com/). `docker images` muestra las imágenes disponibles localmente:
+El punto:
 
-```bash
-docker pull debian:bookworm-slim
+```text
+.
 ```
+
+indica que utilizaremos el directorio actual como contexto de construcción.
+
+## Ver las imágenes
+
 ```bash
 docker images
 ```
 
-### Ejecutar y listar contenedores
-
-`docker run` crea y ejecuta un contenedor a partir de una imagen. En el ejemplo anterior, `cowsay` termina inmediatamente después de mostrar el mensaje; por eso, no aparecerá en la lista de contenedores activos. Para ver los contenedores finalizados, usa `docker ps -a`.
+## Ejecutar el contenedor
 
 ```bash
-docker run -d --name cowsay-demo curso-cowsay:1.0
+docker run --rm curso-cowsay:1.0
+```
 
-# Desde Docker hub
-docker run rancher/cowsay:latest
-docker run rancher/cowsay:latest "hola docker"
-docker run rancher/cowsay:latest -l
-docker run rancher/cowsay:latest -f "dragon-and-cow" "hola mundo"
+También podemos proporcionar otro mensaje:
+
+```bash
+docker run --rm curso-cowsay:1.0 "Hola, Viernes de Bioinformática"
+```
+
+---
+
+# 11. Imágenes y contenedores
+
+Una distinción fundamental en Docker es:
+
+```text
+IMAGE
+  │
+  ├── container 1
+  ├── container 2
+  └── container 3
+```
+
+Una misma imagen puede utilizarse para crear múltiples contenedores.
+
+## Descargar una imagen
+
+Por ejemplo:
+
+```bash
+docker pull debian:bookworm-slim
+```
+
+## Ver imágenes locales
+
+```bash
+docker images
+```
+
+## Ver contenedores activos
+
+```bash
 docker ps
 ```
 
-En este comando se reemplaza temporalmente el punto de entrada `cowsay` por una shell que imprime un mensaje y espera 300 segundos. La opción `-d` ejecuta el contenedor en segundo plano y `--name` le asigna un nombre fácil de recordar. Algunos comandos útiles para consultar y administrar contenedores son:
+## Ver todos los contenedores
+
+Incluidos los que ya han terminado:
 
 ```bash
 docker ps -a
-docker logs cowsay-demo
-docker stop cowsay-demo
-docker rm cowsay-demo
 ```
 
-`docker logs` muestra la salida del contenedor; `docker stop` lo detiene y `docker rm` elimina el contenedor detenido. Para borrar la imagen de ejemplo cuando ya no la necesites, primero asegúrate de que no haya contenedores que la estén usando:
+## Eliminar un contenedor
+
+```bash
+docker rm <container-id>
+```
+
+## Eliminar una imagen
 
 ```bash
 docker rmi curso-cowsay:1.0
 ```
 
-Ahora usemos una imagen de `Rstudio` sin instalarlo.
+---
+
+# 12. Ejecutar RStudio dentro de Docker
+
+Una de las ventajas de los contenedores es que podemos ejecutar software sin instalarlo directamente en nuestro sistema.
+
+Por ejemplo, podemos utilizar una imagen de RStudio del proyecto Rocker:
 
 ```bash
-docker run --rm -p 8787:8787 -e PASSWORD=test rocker/rstudio:4
-docker run --rm -p 8787:8787 -e PASSWORD=test -v $PWD:/home/rstudio/ rocker/rstudio:4
+docker run --rm \
+  -p 8787:8787 \
+  -e PASSWORD=test \
+  rocker/rstudio:4
 ```
 
-### Crear un Dockerfile con `dockerfiler`
+Después abre en el navegador:
 
-El paquete de R [`dockerfiler`](https://github.com/ThinkR-open/dockerfiler) permite generar de forma sencilla un `Dockerfile` para un proyecto. Si el proyecto usa `renv`, puedes crear el archivo a partir de su lockfile:
+```text
+http://localhost:8787
+```
+
+Para montar el directorio actual dentro del contenedor:
+
+```bash
+docker run --rm \
+  -p 8787:8787 \
+  -e PASSWORD=test \
+  -v "$PWD:/home/rstudio/" \
+  rocker/rstudio:4
+```
+
+El directorio actual estará disponible en el contenedor en:
+
+```text
+/home/rstudio/project
+```
+
+> La contraseña `test` se utiliza únicamente para este ejercicio local. No utilices contraseñas simples en despliegues reales.
+
+---
+
+# 13. Crear un Dockerfile para un proyecto de R
+
+Hasta ahora hemos utilizado imágenes existentes.
+
+El siguiente paso es crear una imagen que contenga nuestro propio proyecto de R.
+
+Una estructura simplificada sería:
+
+```text
+viernes-bioinformatica/
+├── modules/
+├── analysis.R
+├── renv.lock
+├── renv/
+├── Dockerfile
+└── README.md
+```
+
+Conceptualmente queremos reproducir:
+
+```text
+Proyecto R
+    +
+Versión de R
+    +
+Paquetes de renv.lock
+    +
+Código
+      ↓
+Docker image
+```
+
+---
+
+# 14. Generar un Dockerfile con `dockerfiler`
+
+El paquete [`dockerfiler`](https://github.com/ThinkR-open/dockerfiler) permite generar Dockerfiles desde R.
+
+Podemos instalarlo con:
 
 ```r
 renv::install("ThinkR-open/dockerfiler")
+```
 
+Después:
+
+```r
 library(dockerfiler)
+```
 
-my_dock <- dock_from_renv(lockfile = "renv.lock", user = NULL)
+Podemos generar un Dockerfile a partir de `renv.lock`:
+
+```r
+my_dock <- dock_from_renv(
+  lockfile = "renv.lock",
+  user = NULL
+)
+```
+
+Comprueba el resultado:
+
+```r
 my_dock
+```
+
+Y escribe el Dockerfile:
+
+```r
 my_dock$write("Dockerfile")
 ```
 
-### Construir y publicar la imagen en Docker Hub
+> El Dockerfile generado es un punto de partida. Antes de utilizarlo en producción conviene revisar la imagen base, las dependencias del sistema, los permisos, la seguridad y la estrategia de instalación de paquetes.
 
-Antes de continuar, asegúrate de tener a mano tu usuario de Docker Hub y tu PAT. Inicia sesión con tu usuario; cuando Docker solicite la contraseña, introduce el PAT:
+---
 
-```bash
-docker login --username tu_usuario
-```
+# 15. Construir nuestra imagen
 
-Desde el directorio que contiene el `Dockerfile`, construye la imagen con el nombre de tu cuenta y una etiqueta:
+Desde el directorio que contiene el `Dockerfile`:
 
 ```bash
-docker build -t tu_usuario/mi-imagen:1.0 .
+docker build -t mi-imagen:1.0 .
 ```
 
-Publica la imagen en Docker Hub:
+Comprueba que la imagen existe:
+
+```bash
+docker images
+```
+
+---
+
+# 16. Publicar una imagen en Docker Hub
+
+Para publicar la imagen necesitaremos una cuenta de Docker Hub.
+
+Primero inicia sesión:
+
+```bash
+docker login
+```
+
+También puedes especificar el usuario:
+
+```bash
+docker login -u tu_usuario
+```
+
+Docker solicitará la contraseña o token de acceso de forma interactiva.
+
+> **Importante:** nunca escribas un Personal Access Token (PAT) en el Dockerfile, en scripts que vayas a versionar o directamente en un repositorio Git.
+
+## Crear una etiqueta para Docker Hub
+
+Las imágenes publicadas deben utilizar el nombre de usuario o namespace correspondiente.
+
+Por ejemplo:
+
+```bash
+docker tag mi-imagen:1.0 tu_usuario/mi-imagen:1.0
+```
+
+Comprueba:
+
+```bash
+docker images
+```
+
+Deberías encontrar:
+
+```text
+mi-imagen                    1.0
+tu_usuario/mi-imagen         1.0
+```
+
+## Publicar la imagen
 
 ```bash
 docker push tu_usuario/mi-imagen:1.0
 ```
 
-Reemplaza `tu_usuario` por tu nombre de usuario de Docker Hub. No escribas el PAT en el comando, en el `Dockerfile` ni en el repositorio.
+La imagen estará disponible en Docker Hub bajo tu cuenta.
 
-## Recursos
+Otra persona podrá descargarla mediante:
 
-* Advanced R https://adv-r.hadley.nz/index.html
-* Mastering Shiny https://mastering-shiny.org/basic-app.html
-* Engineering Production-Grade Shiny Apps https://engineering-shiny.org/index.html
-* Instalacion facil de Docker (Para Linux/WSL2) https://github.com/docker/docker-install
+```bash
+docker pull tu_usuario/mi-imagen:1.0
+```
+
+Aquí completamos otro nivel de reproducibilidad:
+
+```text
+Código
+  +
+Git
+  +
+renv.lock
+  +
+Dockerfile
+  ↓
+Docker image
+  ↓
+Docker Hub
+```
+
+---
+
+# 17. Comandos útiles
+
+## Git
+
+```bash
+git status
+git add .
+git commit -m "Descripción del cambio"
+git push
+git pull
+```
+
+## rig
+
+```bash
+rig available
+rig list
+rig add 4.6.1
+rig default 4.6.1
+```
+
+## renv
+
+```r
+renv::status()
+renv::install("package-name")
+renv::snapshot()
+renv::restore()
+```
+
+## Docker
+
+```bash
+# Información
+docker --version
+
+# Autenticación
+docker login
+
+# Imágenes
+docker images
+docker pull <imagen>
+docker rmi <imagen>
+
+# Contenedores
+docker ps
+docker ps -a
+docker run <imagen>
+docker stop <contenedor>
+docker rm <contenedor>
+
+# Construir imágenes
+docker build -t <nombre>:<tag> .
+
+# Etiquetar
+docker tag <imagen>:<tag> <usuario>/<imagen>:<tag>
+
+# Publicar
+docker push <usuario>/<imagen>:<tag>
+```
+
+---
+
+# Limpieza de Docker
+
+Durante los ejercicios puedes acumular imágenes, contenedores y caché de construcción.
+
+Puedes comprobar el espacio utilizado con:
+
+```bash
+docker system df
+```
+
+Para eliminar objetos de Docker que no están siendo utilizados:
+
+```bash
+docker system prune
+```
+
+Docker solicitará confirmación antes de eliminar los recursos.
+
+Existe también:
+
+```bash
+docker system prune -a
+```
+
+> **Cuidado:** la opción `-a` elimina todas las imágenes que no estén siendo utilizadas por contenedores, no solamente imágenes intermedias. No la utilices como comando habitual de limpieza sin comprobar primero qué recursos necesitas conservar.
+
+---
+
+# Opcional: VS Code
+
+El curso utiliza **Positron** como entorno principal de desarrollo.
+
+Si prefieres utilizar Visual Studio Code, puedes instalar la extensión de R:
+
+```bash
+code --install-extension REditorSupport.r --force
+```
+
+Este paso **no es necesario** si estás utilizando Positron.
+
+---
+
+# Flujo completo del curso
+
+Al finalizar habremos recorrido el siguiente flujo:
+
+```text
+R
+│
+├── rig
+│   └── versión de R
+│
+├── renv
+│   └── dependencias
+│
+├── box
+│   └── módulos
+│
+├── Git + GitHub
+│   └── control de versiones
+│
+└── Docker
+    ├── Dockerfile
+    ├── imagen
+    ├── contenedor
+    └── Docker Hub
+```
+
+La idea principal es pasar progresivamente de:
+
+```text
+"Funciona en mi ordenador"
+```
+
+a:
+
+```text
+"El proyecto describe cómo reproducir
+su código, dependencias y entorno"
+```
+
+---
+
+# Recursos
+
+## R
+
+- [Advanced R](https://adv-r.hadley.nz/index.html)
+- [`rig`](https://rig.r-lib.org/)
+- [`renv`](https://rstudio.github.io/renv/articles/renv.html)
+- [`box`](https://klmr.me/box/)
+
+## Shiny
+
+- [Mastering Shiny](https://mastering-shiny.org/basic-app.html)
+- [Engineering Production-Grade Shiny Apps](https://engineering-shiny.org/index.html)
+
+## Git
+
+- [Git](https://git-scm.com/)
+- [GitHub](https://github.com/)
+
+## Docker
+
+- [Docker Documentation](https://docs.docker.com/)
+- [Docker Hub](https://hub.docker.com/)
+- [Docker Engine](https://docs.docker.com/engine/install/)
+- [Docker Install Scripts](https://github.com/docker/docker-install)
+- [`dockerfiler`](https://github.com/ThinkR-open/dockerfiler)
