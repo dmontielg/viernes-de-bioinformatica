@@ -15,27 +15,28 @@ A partir de la configuración del entorno de R, el curso cubrirá progresivament
 
 El objetivo es ofrecer una ruta práctica desde los conceptos básicos de hasta una aplicación reproducible y contenerizada usando R como lenguaje. También se presentan el uso de librerias como `renv` para entornos reproducibles, módulos con `box` y finalmente crear una imagen `docker` para su reproducibilidad.
 
+## Requisito: instalar Git
+
+Instala Git siguiendo las [instrucciones oficiales](https://git-scm.com/downloads/linux). En Ubuntu o Debian, puedes instalarlo desde la terminal:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y git
+```
+
+Comprueba que se instaló correctamente:
+
+```bash
+git --version
+```
+
 ## Antes de empezar: GitHub y tu primer commit
 
-Antes de comenzar los ejercicios, configuraremos GitHub CLI (`gh`) y crearás un repositorio propio en GitHub. Usaremos este `README.md` como contenido inicial para hacer tu primer commit.
-
-Inicia sesión con tu cuenta de GitHub y comprueba la autenticación:
+Crea un repositorio público llamado `viernes` (o el nombre que quieras) desde [GitHub](https://github.com/new). Clónalo en tu computadora, copia el `README.md` de este repositorio del curso a la carpeta clonada y registra el archivo:
 
 ```bash
-gh auth login
-gh auth status
-```
-
-Crea un repositorio público y clónalo en tu computadora. Puedes llamarlo `viernes` o el nombre que quieras usar:
-
-```bash
-gh repo create viernes --public --clone
+git clone https://github.com/<tu-usuario>/viernes.git
 cd viernes
-```
-
-Copia el archivo `README.md` de este repositorio del curso a la carpeta `viernes`. Luego registra el archivo, crea el commit inicial y súbelo a GitHub:
-
-```bash
 git add README.md
 git commit -m "Add initial README"
 git push -u origin HEAD
