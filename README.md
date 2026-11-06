@@ -6,12 +6,10 @@
 
 Antes de comenzar, asegurate de contar con:
 - Una terminal: Ya sea de Linux, con Windows usa WSL2 o Unix con macOSX.
-- Una **cuenta de GitHub**, que usarás para GitHub y que también puedes usar para registrarte o iniciar sesión en Docker Hub.
-- **Git** instalado.
-- **Docker** instalado y con la sesión iniciada en Docker Hub.
-- **Positron** instalado.
-
-Crea una cuenta de GitHub en: https://github.com/
+- Una **cuenta de GitHub**, que usarás para GitHub y que también puedes usar para registrarte o iniciar sesión en Docker Hub. https://github.com/
+- **Git** instalado. https://git-scm.com/install/
+- **Docker** instalado y con la sesión iniciada en Docker Hub. https://docs.docker.com/get-started/get-docker/
+- **Positron** instalado. https://positron.posit.co/
 
 ## Instalación en tu computadora
 
