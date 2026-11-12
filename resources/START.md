@@ -147,9 +147,25 @@ curl -LsSf https://r-lib.github.io/rig/install.sh | sh
 
 # 3. Preparar las dependencias del sistema para R
 
-Algunos paquetes de R necesitan bibliotecas del sistema para poder compilarse.
+**Instalacion de dependencias para paquetes en R y de desarrikki.** En Linux, muchas librerías de R se descargan como código fuente y se compilan en tu máquina. Si no instalas estos componentes en tu sistema operativo, comandos como `install.packages()` o `devtools::install_github()` fallarán con errores de compilación.
 
-En Ubuntu o Debian podemos instalar algunas dependencias habituales con:
+### 🛠️ Compilación Base
+*   **`build-essential`**: Instala los compiladores fundamentales (`gcc`, `g++` y `make`). Es el motor obligatorio para compilar cualquier paquete de R que contenga código nativo.
+
+### 📦 Compresión de Datos
+*   **`zlib1g-dev`** / **`libbz2-dev`** / **`liblzma-dev`** / **`libdeflate-dev`**: Permiten a R leer y escribir archivos comprimidos (formatos `.gz`, `.bz2`, `.xz`, entre otros). Son indispensables para paquetes de manejo de datos masivos como `readr` o `data.table`.
+
+### 🌐 Conectividad y Control de Versiones
+*   **`libcurl4-openssl-dev`**: Permite conexiones HTTPS seguras. Lo requiere el paquete `curl` de R, que a su vez da vida a herramientas esenciales de descarga de datos (`httr`, `httr2`).
+*   **`libgit2-dev`**: Es la librería de Git para el sistema. La utilizan herramientas de desarrollo como `devtools` y `usethis` para interactuar directamente con GitHub desde R.
+
+### ⚡ Procesamiento Asíncrono y Sistema
+*   **`libuv1-dev`**: Facilita la ejecución de tareas asíncronas en segundo plano. Es un requisito obligatorio para el paquete `later`, que es el motor detrás de las aplicaciones web interactivas con **`shiny`**.
+*   **`util-linux-extra`**: Aporta utilidades del sistema operativo necesarias para que ciertos paquetes de bajo nivel de R generen identificadores únicos (UUID) e interactúen con Linux.
+
+### 🎨 Gráficos e Imágenes
+*   **`libtiff-dev`**: Añade soporte para leer y escribir imágenes en formato TIFF. Es necesario si vas a trabajar con procesamiento de imágenes (`magick`) o análisis de mapas y datos geoespaciales (`sf`, `raster`).
+
 
 ```bash
 sudo apt-get update
@@ -163,6 +179,7 @@ sudo apt-get install -y \
     libcurl4-openssl-dev \
     libgit2-dev \
     libtiff-dev \
+    util-linux-extra \
     libuv1-dev
 ```
 
