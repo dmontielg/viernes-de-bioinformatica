@@ -237,7 +237,7 @@ Con `renv` activo podemos instalar paquetes dentro del entorno del proyecto.
 Por ejemplo:
 
 ```r
-renv::install("jsonlite")
+renv::install("box")
 ```
 
 También podemos instalar varios paquetes:
@@ -262,18 +262,10 @@ Esto actualizará:
 renv.lock
 ```
 
-## Comandos principales de `renv`
-
 ### Comprobar el estado del proyecto
 
 ```r
 renv::status()
-```
-
-### Instalar una dependencia
-
-```r
-renv::install("ggplot2")
 ```
 
 ### Registrar las dependencias actuales
@@ -303,54 +295,14 @@ renv.lock
        ↓
 Git
        ↓
-Otro ordenador
+Otra computadora
        ↓
 renv::restore()
 ```
 
 ---
 
-# 5. Paquetes para el entorno de desarrollo
-
-Algunos paquetes son útiles para mejorar la experiencia de desarrollo.
-
-Por ejemplo:
-
-```r
-renv::install(c(
-  "languageserver",
-  "httpgd"
-))
-```
-
-Estos paquetes son especialmente útiles en editores que proporcionan integración avanzada con R.
-
-Si necesitas excluir determinados paquetes del análisis de dependencias de `renv`, puedes utilizar:
-
-```r
-renv::settings$ignored.packages(c(
-  "languageserver",
-  "httpgd"
-))
-```
-
-Para consultar los paquetes ignorados:
-
-```r
-renv::settings$ignored.packages()
-```
-
-Para restablecer la configuración:
-
-```r
-renv::settings$ignored.packages(character())
-```
-
-> Utiliza `ignored.packages` únicamente cuando tengas una razón concreta para excluir esos paquetes del entorno reproducible del proyecto.
-
----
-
-# 6. Organizar código R con `box`
+# 5. Organizar código R con `box`
 
 [`box`](https://klmr.me/box/) permite organizar el código R en módulos reutilizables.
 
@@ -440,7 +392,7 @@ library(dplyr)
 
 ---
 
-# 7. Ejemplo práctico en R
+# 6. Ejemplo práctico en R
 
 Vamos a crear un pequeño análisis reproducible utilizando `dplyr` y `ggplot2`.
 
@@ -534,49 +486,6 @@ ggplot(
 
 ---
 
-## Ejemplo: control de calidad
-
-```r
-quality_data <- data.frame(
-  sample = c(
-    "Muestra 1", "Muestra 1", "Muestra 1",
-    "Muestra 2", "Muestra 2", "Muestra 2"
-  ),
-  measurement = c(12.4, 9.8, 11.1, 8.5, 10.6, 12.0)
-)
-```
-
-Clasificamos las observaciones utilizando un umbral:
-
-```r
-quality_summary <- quality_data |>
-  mutate(passes_threshold = measurement >= 10) |>
-  group_by(sample) |>
-  summarise(
-    passing_fraction = mean(passes_threshold),
-    .groups = "drop"
-  )
-```
-
-Visualizamos el resultado:
-
-```r
-ggplot(
-  quality_summary,
-  aes(x = sample, y = passing_fraction, fill = sample)
-) +
-  geom_col(show.legend = FALSE) +
-  scale_y_continuous(limits = c(0, 1)) +
-  labs(
-    title = "Proporción de mediciones que superan el umbral",
-    x = "Muestra",
-    y = "Proporción"
-  ) +
-  theme_minimal()
-```
-
----
-
 # 8. Guardar el entorno reproducible
 
 Después de añadir nuestro código y dependencias:
@@ -596,7 +505,7 @@ Ahora registramos los cambios con Git:
 ```bash
 git status
 git add .
-git commit -m "Add reproducible R environment"
+git commit -m "Mi entorno reproducible con renv"
 git push
 ```
 
@@ -693,13 +602,13 @@ CMD ["Hola desde Docker"]
 ## Construir la imagen
 
 ```bash
-docker build -t curso-cowsay:1.0 .
+docker build -t viernes-cowsay:1.0 .
 ```
 
 La opción:
 
 ```text
--t curso-cowsay:1.0
+-t viernes-cowsay:1.0
 ```
 
 establece el nombre y la etiqueta de la imagen.
