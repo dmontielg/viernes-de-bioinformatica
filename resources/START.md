@@ -40,6 +40,9 @@ Configura tu nombre y correo electrónico:
 ```bash
 git config --global user.name "Tu Nombre"
 git config --global user.email "tu-correo@ejemplo.com"
+git config --global init.defaultBranch main
+git config --global core.autocrlf input
+git config --global core.filemode false
 ```
 
 Puedes revisar la configuración con:
