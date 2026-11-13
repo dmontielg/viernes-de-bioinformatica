@@ -1,6 +1,4 @@
 settings.json
-renv/
-.Rprofile
 .Rhistory
 .RData
 .Ruserdata

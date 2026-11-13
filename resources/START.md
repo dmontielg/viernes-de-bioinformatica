@@ -1075,6 +1075,24 @@ docker system prune -a
 
 > **Cuidado:** la opción `-a` elimina todas las imágenes que no estén siendo utilizadas por contenedores, no solamente imágenes intermedias. No la utilices como comando habitual de limpieza sin comprobar primero qué recursos necesitas conservar.
 
+
+Puedes utilizar la imagen Docker con paquete preinstalados usando renv para Deseq2. 
+Si vas a utilizar un entorno desde cero necesitas copiar del contenedor docker
+  1. .Rprofile
+  2. renv/
+  3. renv.lock
+
+Esto te permitira empezar en un nuevo entorno e instalar y actualizar paquetes si eso quieres.
+
+```bash
+docker pull dmontielg/viernes-rstudio:latest
+docker create --name temp-rstudio dmontielg/viernes-rstudio:latest
+docker cp temp-rstudio:/home/rstudio/.Rprofile ./.Rprofile
+docker cp temp-rstudio:/home/rstudio/renv.lock ./renv.lock
+docker cp temp-rstudio:/home/rstudio/renv ./renv
+docker rm temp-rstudio
+```
+
 ---
 
 # Opcional: VS Code
