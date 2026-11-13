@@ -90,6 +90,18 @@ A partir de este momento podremos utilizar Git para registrar los cambios realiz
 
 # 2. Administrar versiones de R con `rig`
 
+## Instalación de `rig`
+
+Si todavía no tienes `rig` instalado, consulta las instrucciones oficiales:
+
+https://rig.r-lib.org/
+
+En sistemas compatibles con el instalador mediante shell:
+
+```bash
+curl -LsSf https://r-lib.github.io/rig/install.sh | sh
+```
+
 [`rig`](https://rig.r-lib.org/) es un administrador de instalaciones de R que permite instalar y mantener diferentes versiones de R en el mismo sistema.
 
 Comprueba si `rig` está instalado:
@@ -134,17 +146,7 @@ Comprueba qué versión de R se está utilizando:
 R --version
 ```
 
-## Instalación de `rig`
 
-Si todavía no tienes `rig` instalado, consulta las instrucciones oficiales:
-
-https://rig.r-lib.org/
-
-En sistemas compatibles con el instalador mediante shell:
-
-```bash
-curl -LsSf https://r-lib.github.io/rig/install.sh | sh
-```
 
 ---
 
